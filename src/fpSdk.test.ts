@@ -6,9 +6,7 @@ import {
     Nothing,
     OptionHelpers,
     TypeHelpers,
-} from "../fpHelpers.js";
-import { spawnSync } from "child_process";
-import os from "os";
+} from "./index.js";
 
 function typeGuard(option: Option<number>) {
     if (option instanceof None) {

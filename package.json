@@ -1,0 +1,56 @@
+{
+  "name": "fp-sdk",
+  "version": "0.1.0",
+  "description": "A lightweight functional programming SDK for TypeScript - Option types and utilities without the bloat",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "LICENCE.txt",
+    "ReadMe.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "keywords": [
+    "typescript",
+    "functional-programming",
+    "fp",
+    "option",
+    "maybe",
+    "monad",
+    "utility",
+    "sdk"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/fp-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/fp-sdk/issues"
+  },
+  "homepage": "https://github.com/yourusername/fp-sdk#readme"
+}
