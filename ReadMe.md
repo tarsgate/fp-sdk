@@ -114,4 +114,4 @@ NO! There has to be a better way.
 
 And, no, adopting the HUGELY BLOATED lib 'Effect.ts' is not it. We need something way more simple.
 
-Enter fp-sdk.
+Enter *fp-sdk*.
