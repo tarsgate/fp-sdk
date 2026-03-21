@@ -40,22 +40,3 @@ export class Ok<T> {
 }
 
 export type Result<T, E> = (Ok<T> | Err<E>) & IResult;
-
-export class ResultHelpers {
-    public static OfFn<T, E = unknown>(fn: () => T): Result<T, E> {
-        try {
-            return new Ok(fn());
-        } catch (e) {
-            return new Err(e as E);
-        }
-    }
-
-    public static async OfPromise<T, E = unknown>(promise: Promise<T>): Promise<Result<T, E>> {
-        try {
-            const val = await promise;
-            return new Ok(val);
-        } catch (e) {
-            return new Err(e as E);
-        }
-    }
-}
