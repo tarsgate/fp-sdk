@@ -1,3 +1,6 @@
+fp-sdk [![NPM Version](https://img.shields.io/npm/v/fp-sdk)](https://www.npmjs.com/package/fp-sdk)
+======
+
 After more than 20 years of programming, and being a bit seasoned on the TypeScript/JavaScript space, one morning I decided to ask an AI this question:
 
 > given that typescript tries to improve javascript, so to speak, wouldn't it be better if devs using typescript stop using `undefined`, and just use `null`, to prevent one of the main javascript pitfalls?
