@@ -2,11 +2,11 @@ interface IResult {
     /**
      * @deprecated it is better to use `if (foo instanceof Err)` so that you can access the .error in the `if` block
      **/
-    IsErr(): boolean;
+    isErr(): boolean;
     /**
      * @deprecated it is better to use `if (foo instanceof Ok)` so that you can access the .value in the `if` block
      **/
-    IsOk(): boolean;
+    isOk(): boolean;
 }
 
 export class Err<E> {
@@ -16,10 +16,10 @@ export class Err<E> {
         this.error = err;
     }
 
-    public IsErr(): boolean {
+    public isErr(): boolean {
         return true;
     }
-    public IsOk(): boolean {
+    public isOk(): boolean {
         return false;
     }
 }
@@ -31,10 +31,10 @@ export class Ok<T> {
         this.value = val;
     }
 
-    public IsErr(): boolean {
+    public isErr(): boolean {
         return false;
     }
-    public IsOk(): boolean {
+    public isOk(): boolean {
         return true;
     }
 }

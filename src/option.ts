@@ -2,18 +2,18 @@ interface IOption {
     /**
      * @deprecated it is better to use `if (foo instanceof None)` so that you can access the .value in the `else` case
      **/
-    IsNone(): boolean;
+    isNone(): boolean;
     /**
      * @deprecated it is better to use `if (!(foo instanceof None))` so that you can access the .value inside the `if` block
      **/
-    IsSome(): boolean;
+    isSome(): boolean;
 }
 
 export class None {
-    public IsNone(): boolean {
+    public isNone(): boolean {
         return true;
     }
-    public IsSome(): boolean {
+    public isSome(): boolean {
         return false;
     }
 
@@ -29,10 +29,10 @@ export class Some<T> {
         this.value = val;
     }
 
-    public IsNone(): boolean {
+    public isNone(): boolean {
         return false;
     }
-    public IsSome(): boolean {
+    public isSome(): boolean {
         return true;
     }
 }
@@ -42,7 +42,7 @@ export type Option<T> = (None | Some<NonNullable<T>>) & IOption;
 export const Nothing = new None();
 
 export class OptionHelpers {
-    public static OfObj<T>(obj: T | null | undefined): Option<NonNullable<T>> {
+    public static ofObj<T>(obj: T | null | undefined): Option<NonNullable<T>> {
         if (obj === null || obj === undefined) {
             return Nothing;
         } else {
