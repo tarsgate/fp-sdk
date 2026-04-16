@@ -12,10 +12,24 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Install dependencies
+      - name: Install fast-apt-mirror's dependencies
         run: |
           apt update --yes
 
+          apt install --yes --no-install-recommends ca-certificates curl
+
+      - name: Select best APT mirror
+        env:
+          # last tag "refs/tags/1.4.2" doesn't contain latest fixes yet wrt https://github.com/vegardit/fast-apt-mirror.sh/issues/19
+          FAST_APT_MIRROR_VERSION: "refs/heads/v1"
+        run: |
+          curl "https://raw.githubusercontent.com/vegardit/fast-apt-mirror.sh/$FAST_APT_MIRROR_VERSION/fast-apt-mirror.sh" -o ./fast-apt-mirror.sh
+          chmod 755 ./fast-apt-mirror.sh
+          ./fast-apt-mirror.sh find --apply --verbose
+          rm ./fast-apt-mirror.sh
+
+      - name: Install dependencies
+        run: |
           # NOTE: do not change the below with an `actions/setup-node` step!
           # we don't like our CI steps to be a blackbox that is not easier to mimic by devs
           # (and this way we're testing with official Ubuntu packages, not whatever the GitHub/NodeJS guys fancy)
