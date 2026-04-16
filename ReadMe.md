@@ -5,7 +5,7 @@ After more than 20 years of programming, and being a bit seasoned on the TypeScr
 
 > given that typescript tries to improve javascript, so to speak, wouldn't it be better if devs using typescript stop using `undefined`, and just use `null`, to prevent one of the main javascript pitfalls?
 
-The AI replied with something both unexpected and surprising — TL;DR: "nah, rather use `undefined` instead of `null`, if you're going to avoid one of them".
+The AI replied with something both unexpected and surprising — TL;DR: _"nah, rather use `undefined` instead of `null`, if you're going to avoid one of them"_.
 
 Here was the full reply:
 
