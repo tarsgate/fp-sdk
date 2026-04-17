@@ -28,7 +28,7 @@ jobs:
           ./fast-apt-mirror.sh find --apply --verbose
           rm ./fast-apt-mirror.sh
 
-      - name: Install dependencies
+      - name: Install APT dependencies
         run: |
           # NOTE: do not change the below with an `actions/setup-node` step!
           # we don't like our CI steps to be a blackbox that is not easier to mimic by devs
@@ -38,7 +38,7 @@ jobs:
       - name: Print versions
         run: node --version && npm --version
 
-      - name: Install dependencies
+      - name: Install NPM dependencies
         run: npm ci
 
       - name: Build package
