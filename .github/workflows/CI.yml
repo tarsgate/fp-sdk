@@ -43,10 +43,33 @@ jobs:
       - name: Build and push image
         if: steps.check.outputs.image_exists == 'false'
         run: |
-          TAG=${{ needs.calc-docker-img-tag.outputs.tag }}
-          IMAGE=ghcr.io/${{ github.repository_owner }}/fp-sdk-ci
-          docker build -t $IMAGE:$TAG .
+          TAG=${{ needs.calc-docker-img-tag.outputs.tag }} &&
+          IMAGE=ghcr.io/${{ github.repository_owner }}/fp-sdk-ci &&
+          docker build -t $IMAGE:$TAG . &&
           docker push $IMAGE:$TAG
+      - name: Delete other GHCR package versions (keep current)
+        if: steps.check.outputs.image_exists == 'false'
+        env:
+          TAG: ${{ needs.calc-docker-img-tag.outputs.tag }}
+        run: |
+          PACKAGE=fp-sdk-ci &&
+          OWNER=${{ github.repository_owner }} &&
+          AUTH_HEADER="Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" &&
+
+          # Try org endpoint first, fall back to user endpoint
+          VERSIONS=$(curl --silent --header "$AUTH_HEADER" "https://api.github.com/orgs/${OWNER}/packages/container/${PACKAGE}/versions") &&
+          if echo "$VERSIONS" | jq -e 'type == "array"' > /dev/null 2>&1; then
+            API_BASE="https://api.github.com/orgs/${OWNER}/packages/container/${PACKAGE}/versions"
+          else
+            VERSIONS=$(curl --silent --header "$AUTH_HEADER" "https://api.github.com/users/${OWNER}/packages/container/${PACKAGE}/versions") &&
+            API_BASE="https://api.github.com/users/${OWNER}/packages/container/${PACKAGE}/versions"
+          fi &&
+
+          # Delete all versions that don't have the current tag
+          echo "$VERSIONS" | jq -r --arg TAG "$TAG" '.[] | select(.metadata.container.tags | index($TAG) | not) | .id' | while read -r VERSION_ID; do
+            echo "Deleting version $VERSION_ID" &&
+            curl --silent --request DELETE --header "$AUTH_HEADER" "${API_BASE}/${VERSION_ID}"
+          done
 
   build-and-test:
     needs: [calc-docker-img-tag, docker-img-build-push]
