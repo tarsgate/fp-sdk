@@ -5,48 +5,65 @@ on:
   pull_request:
 
 jobs:
-  buildAndTest:
-    runs-on: ubuntu-24.04
+  calc-docker-img-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.md5sum.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Compute MD5 sum of Dockerfile
+        id: md5sum
+        run: |
+          echo "tag=$(md5sum Dockerfile | awk '{print $1}')" >> $GITHUB_OUTPUT
+
+  docker-img-build-push:
+    needs: calc-docker-img-tag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v6
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check if image exists
+        id: check
+        run: |
+          TAG=${{ needs.calc-docker-img-tag.outputs.tag }}
+          IMAGE=ghcr.io/${{ github.repository_owner }}/fp-sdk-ci:$TAG
+          if docker manifest inspect $IMAGE > /dev/null 2>&1; then
+            echo "image_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "image_exists=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Build and push image
+        if: steps.check.outputs.image_exists == 'false'
+        run: |
+          TAG=${{ needs.calc-docker-img-tag.outputs.tag }}
+          IMAGE=ghcr.io/${{ github.repository_owner }}/fp-sdk-ci
+          docker build -t $IMAGE:$TAG .
+          docker push $IMAGE:$TAG
+
+  build-and-test:
+    needs: [calc-docker-img-tag, docker-img-build-push]
+    runs-on: ubuntu-latest
     container:
-      image: "ubuntu:24.04"
+      image: ghcr.io/${{ github.repository_owner }}/fp-sdk-ci:${{ needs.calc-docker-img-tag.outputs.tag }}
     steps:
       - uses: actions/checkout@v6
 
-      - name: Install fast-apt-mirror's dependencies
-        run: |
-          apt update --yes
-
-          apt install --yes --no-install-recommends ca-certificates curl
-
-      - name: Select best APT mirror
-        env:
-          # last tag "refs/tags/1.4.2" doesn't contain latest fixes yet wrt https://github.com/vegardit/fast-apt-mirror.sh/issues/19
-          FAST_APT_MIRROR_VERSION: "refs/heads/v1"
-        run: |
-          curl "https://raw.githubusercontent.com/vegardit/fast-apt-mirror.sh/$FAST_APT_MIRROR_VERSION/fast-apt-mirror.sh" -o ./fast-apt-mirror.sh
-          chmod 755 ./fast-apt-mirror.sh
-          ./fast-apt-mirror.sh find --apply --verbose
-          rm ./fast-apt-mirror.sh
-
-      - name: Install APT dependencies
-        run: |
-          # NOTE: do not change the below with an `actions/setup-node` step!
-          # we don't like our CI steps to be a blackbox that is not easier to mimic by devs
-          # (and this way we're testing with official Ubuntu packages, not whatever the GitHub/NodeJS guys fancy)
-          apt install --yes --no-install-recommends npm
-
       - name: Print versions
         run: node --version && npm --version
-
       - name: Install NPM dependencies
         run: npm ci
-
       - name: Build package
         run: npm run build
-
       - name: Run linter (type check)
         run: npm run lint
-
       - name: Run tests
         run: npm test
 
