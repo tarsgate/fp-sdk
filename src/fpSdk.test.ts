@@ -97,6 +97,26 @@ test("testing TypeHelpers.cast.to", () => {
     expect(TypeHelpers.cast(bar).to(Foo)).toBe(false);
 });
 
+test("testing TypeHelpers.stringIsNullishOrEmpty", () => {
+    expect(TypeHelpers.stringIsNullishOrEmpty(null as any)).toBe(true);
+    expect(TypeHelpers.stringIsNullishOrEmpty(undefined as any)).toBe(true);
+    expect(TypeHelpers.stringIsNullishOrEmpty("")).toBe(true);
+    expect(TypeHelpers.stringIsNullishOrEmpty("hello")).toBe(false);
+    expect(TypeHelpers.stringIsNullishOrEmpty(" ")).toBe(false);
+});
+
+test("testing TypeHelpers.stringIsNullishOrWhiteSpace", () => {
+    expect(TypeHelpers.stringIsNullishOrWhiteSpace(null as any)).toBe(true);
+    expect(TypeHelpers.stringIsNullishOrWhiteSpace(undefined as any)).toBe(true);
+    expect(TypeHelpers.stringIsNullishOrWhiteSpace("")).toBe(true);
+    expect(TypeHelpers.stringIsNullishOrWhiteSpace(" ")).toBe(true);
+    expect(TypeHelpers.stringIsNullishOrWhiteSpace("\t")).toBe(true);
+    expect(TypeHelpers.stringIsNullishOrWhiteSpace("\n")).toBe(true);
+    expect(TypeHelpers.stringIsNullishOrWhiteSpace("   \t\n  ")).toBe(true);
+    expect(TypeHelpers.stringIsNullishOrWhiteSpace("hello")).toBe(false);
+    expect(TypeHelpers.stringIsNullishOrWhiteSpace(" hello ")).toBe(false);
+});
+
 test("testing TypeHelpers.cast.to exceptions", () => {
     const strNull = null;
     expect(() => TypeHelpers.cast(strNull).to(String)).toThrowError(
