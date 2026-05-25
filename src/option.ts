@@ -4,7 +4,7 @@ interface IOption {
      **/
     isNone(): boolean;
     /**
-     * @deprecated it is better to use `if (!(foo instanceof None))` so that you can access the .value inside the `if` block
+     * @deprecated it is better to use `if (foo instanceof Some)` so that you can access the .value inside the `if` block
      **/
     isSome(): boolean;
 }
