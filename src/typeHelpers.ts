@@ -6,24 +6,28 @@ export class TypeHelpers {
 
     // because instanceof doesn't work with primitive types (e.g. String), taken from https://stackoverflow.com/a/58184883/544947
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- method accepts any value by design
-    public static isInstanceOf(variable: any, type: any) {
-        if (TypeHelpers.isNullOrUndefined(variable)) {
-            throw new Error(
-                "Invalid 'variable' parameter passed in: null or undefined"
-            );
-        }
-        if (TypeHelpers.isNullOrUndefined(type)) {
-            throw new Error(
-                "Invalid 'type' parameter passed in: null or undefined"
-            );
-        }
+    public static cast(variable: any) {
+        return {
+            to(type: any): boolean {
+                if (TypeHelpers.isNullOrUndefined(variable)) {
+                    throw new Error(
+                        "Invalid 'variable' parameter passed in: null or undefined"
+                    );
+                }
+                if (TypeHelpers.isNullOrUndefined(type)) {
+                    throw new Error(
+                        "Invalid 'type' parameter passed in: null or undefined"
+                    );
+                }
 
-        let res: boolean = false;
-        if (typeof type == "string") {
-            res = typeof variable == type.toLowerCase();
-        } else {
-            res = variable.constructor == type;
-        }
-        return res;
+                let res: boolean = false;
+                if (typeof type == "string") {
+                    res = typeof variable == type.toLowerCase();
+                } else {
+                    res = variable.constructor == type;
+                }
+                return res;
+            },
+        };
     }
 }

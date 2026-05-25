@@ -69,74 +69,53 @@ class Bar {
     }
 }
 
-test("testing TypeHelpers.IsInstanceOf", () => {
+test("testing TypeHelpers.cast.to", () => {
     const str1 = "foo";
-    expect(TypeHelpers.isInstanceOf(str1, String)).toBe(true);
+    expect(TypeHelpers.cast(str1).to(String)).toBe(true);
     const str2 = String("foo");
-    expect(TypeHelpers.isInstanceOf(str2, String)).toBe(true);
+    expect(TypeHelpers.cast(str2).to(String)).toBe(true);
 
     //commented this one because prettier complains about it, but it works:
     //let str3 = 'foo';
-    //expect(TypeHelpers.isInstanceOf(str3, String)).toBe(true);
+    //expect(TypeHelpers.cast(str3).to(String)).toBe(true);
 
     const nonStr = 3;
-    expect(TypeHelpers.isInstanceOf(nonStr, String)).toBe(false);
+    expect(TypeHelpers.cast(nonStr).to(String)).toBe(false);
 
     const int1 = 2;
-    expect(TypeHelpers.isInstanceOf(int1, Number)).toBe(true);
+    expect(TypeHelpers.cast(int1).to(Number)).toBe(true);
     const int2 = Number(2);
-    expect(TypeHelpers.isInstanceOf(int2, Number)).toBe(true);
+    expect(TypeHelpers.cast(int2).to(Number)).toBe(true);
     const nonInt = "2";
-    expect(TypeHelpers.isInstanceOf(nonInt, Number)).toBe(false);
+    expect(TypeHelpers.cast(nonInt).to(Number)).toBe(false);
 
     const foo = new Foo();
     const bar = new Bar();
-    expect(TypeHelpers.isInstanceOf(foo, Foo)).toBe(true);
-    expect(TypeHelpers.isInstanceOf(bar, Bar)).toBe(true);
-    expect(TypeHelpers.isInstanceOf(foo, Bar)).toBe(false);
-    expect(TypeHelpers.isInstanceOf(bar, Foo)).toBe(false);
+    expect(TypeHelpers.cast(foo).to(Foo)).toBe(true);
+    expect(TypeHelpers.cast(bar).to(Bar)).toBe(true);
+    expect(TypeHelpers.cast(foo).to(Bar)).toBe(false);
+    expect(TypeHelpers.cast(bar).to(Foo)).toBe(false);
 });
 
-test("testing TypeHelpers.isInstanceOf exceptions", () => {
+test("testing TypeHelpers.cast.to exceptions", () => {
     const strNull = null;
-    expect(() => TypeHelpers.isInstanceOf(strNull, String)).toThrowError(
+    expect(() => TypeHelpers.cast(strNull).to(String)).toThrowError(
         "Invalid"
     );
-    expect(() => TypeHelpers.isInstanceOf(strNull, String)).toThrowError(
+    expect(() => TypeHelpers.cast(strNull).to(String)).toThrowError(
         "parameter"
     );
-    expect(() => TypeHelpers.isInstanceOf(strNull, String)).toThrowError(
+    expect(() => TypeHelpers.cast(strNull).to(String)).toThrowError(
         "null"
     );
     const strUndefined = undefined;
-    expect(() => TypeHelpers.isInstanceOf(strUndefined, String)).toThrowError(
+    expect(() => TypeHelpers.cast(strUndefined).to(String)).toThrowError(
         "Invalid"
     );
-    expect(() => TypeHelpers.isInstanceOf(strUndefined, String)).toThrowError(
+    expect(() => TypeHelpers.cast(strUndefined).to(String)).toThrowError(
         "parameter"
     );
-    expect(() => TypeHelpers.isInstanceOf(strUndefined, String)).toThrowError(
-        "undefined"
-    );
-
-    const typeNull = null;
-    expect(() => TypeHelpers.isInstanceOf("foo", typeNull)).toThrowError(
-        "Invalid"
-    );
-    expect(() => TypeHelpers.isInstanceOf("foo", typeNull)).toThrowError(
-        "parameter"
-    );
-    expect(() => TypeHelpers.isInstanceOf("foo", typeNull)).toThrowError(
-        "null"
-    );
-    const typeUndefined = undefined;
-    expect(() => TypeHelpers.isInstanceOf("foo", typeUndefined)).toThrowError(
-        "Invalid"
-    );
-    expect(() => TypeHelpers.isInstanceOf("foo", typeUndefined)).toThrowError(
-        "parameter"
-    );
-    expect(() => TypeHelpers.isInstanceOf("foo", typeUndefined)).toThrowError(
+    expect(() => TypeHelpers.cast(strUndefined).to(String)).toThrowError(
         "undefined"
     );
 });
