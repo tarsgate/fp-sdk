@@ -9,6 +9,7 @@ import {
     Err,
     Result,
     TypeHelpers,
+    Dyn,
 } from "./index.js";
 
 function typeGuard(option: Option<number>) {
@@ -69,32 +70,32 @@ class Bar {
     }
 }
 
-test("testing TypeHelpers.cast.to", () => {
+test("testing Dyn.cast.to", () => {
     const str1 = "foo";
-    expect(TypeHelpers.cast(str1).to<string>().isSome()).toBe(true);
+    expect(Dyn.cast(str1).to<string>().isSome()).toBe(true);
     const str2 = String("foo");
-    expect(TypeHelpers.cast(str2).to<string>().isSome()).toBe(true);
+    expect(Dyn.cast(str2).to<string>().isSome()).toBe(true);
 
     //commented this one because prettier complains about it, but it works:
     //let str3 = 'foo';
-    //expect(TypeHelpers.cast(str3).to<string>().isSome()).toBe(true);
+    //expect(Dyn.cast(str3).to<string>().isSome()).toBe(true);
 
     const nonStr = 3;
-    expect(TypeHelpers.cast(nonStr).to<string>().isSome()).toBe(true);
+    expect(Dyn.cast(nonStr).to<string>().isSome()).toBe(true);
 
     const int1 = 2;
-    expect(TypeHelpers.cast(int1).to<number>().isSome()).toBe(true);
+    expect(Dyn.cast(int1).to<number>().isSome()).toBe(true);
     const int2 = Number(2);
-    expect(TypeHelpers.cast(int2).to<number>().isSome()).toBe(true);
+    expect(Dyn.cast(int2).to<number>().isSome()).toBe(true);
     const nonInt = "2";
-    expect(TypeHelpers.cast(nonInt).to<number>().isSome()).toBe(true);
+    expect(Dyn.cast(nonInt).to<number>().isSome()).toBe(true);
 
     const foo = new Foo();
     const bar = new Bar();
-    expect(TypeHelpers.cast(foo).to<Foo>().isSome()).toBe(true);
-    expect(TypeHelpers.cast(bar).to<Bar>().isSome()).toBe(true);
-    expect(TypeHelpers.cast(foo).to<Bar>().isSome()).toBe(true);
-    expect(TypeHelpers.cast(bar).to<Foo>().isSome()).toBe(true);
+    expect(Dyn.cast(foo).to<Foo>().isSome()).toBe(true);
+    expect(Dyn.cast(bar).to<Bar>().isSome()).toBe(true);
+    expect(Dyn.cast(foo).to<Bar>().isSome()).toBe(true);
+    expect(Dyn.cast(bar).to<Foo>().isSome()).toBe(true);
 });
 
 test("testing TypeHelpers.stringIsNullishOrEmpty", () => {
@@ -117,25 +118,25 @@ test("testing TypeHelpers.stringIsNullishOrWhiteSpace", () => {
     expect(TypeHelpers.stringIsNullishOrWhiteSpace(" hello ")).toBe(false);
 });
 
-test("testing TypeHelpers.cast.to exceptions", () => {
+test("testing Dyn.cast.to exceptions", () => {
     const strNull = null;
-    expect(() => TypeHelpers.cast(strNull).to<string>()).toThrowError(
+    expect(() => Dyn.cast(strNull).to<string>()).toThrowError(
         "Invalid"
     );
-    expect(() => TypeHelpers.cast(strNull).to<string>()).toThrowError(
+    expect(() => Dyn.cast(strNull).to<string>()).toThrowError(
         "parameter"
     );
-    expect(() => TypeHelpers.cast(strNull).to<string>()).toThrowError(
+    expect(() => Dyn.cast(strNull).to<string>()).toThrowError(
         "null"
     );
     const strUndefined = undefined;
-    expect(() => TypeHelpers.cast(strUndefined).to<string>()).toThrowError(
+    expect(() => Dyn.cast(strUndefined).to<string>()).toThrowError(
         "Invalid"
     );
-    expect(() => TypeHelpers.cast(strUndefined).to<string>()).toThrowError(
+    expect(() => Dyn.cast(strUndefined).to<string>()).toThrowError(
         "parameter"
     );
-    expect(() => TypeHelpers.cast(strUndefined).to<string>()).toThrowError(
+    expect(() => Dyn.cast(strUndefined).to<string>()).toThrowError(
         "undefined"
     );
 });

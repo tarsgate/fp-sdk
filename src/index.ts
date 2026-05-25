@@ -8,5 +8,6 @@ export type { Result } from './result.js';
 
 // Export helpers
 export { TypeHelpers } from './typeHelpers.js';
+export { Dyn } from './dyn.js';
 export { Empty } from './empty.js';
 
