@@ -72,30 +72,26 @@ class Bar {
 
 test("testing Dyn.cast.to", () => {
     const str1 = "foo";
-    expect(Dyn.cast(str1).to<string>().isSome()).toBe(true);
+    expect(Dyn.cast(str1).to(String).isSome()).toBe(true);
     const str2 = String("foo");
-    expect(Dyn.cast(str2).to<string>().isSome()).toBe(true);
-
-    //commented this one because prettier complains about it, but it works:
-    //let str3 = 'foo';
-    //expect(Dyn.cast(str3).to<string>().isSome()).toBe(true);
+    expect(Dyn.cast(str2).to(String).isSome()).toBe(true);
 
     const nonStr = 3;
-    expect(Dyn.cast(nonStr).to<string>().isSome()).toBe(true);
+    expect(Dyn.cast(nonStr).to(String).isSome()).toBe(false);
 
     const int1 = 2;
-    expect(Dyn.cast(int1).to<number>().isSome()).toBe(true);
+    expect(Dyn.cast(int1).to(Number).isSome()).toBe(true);
     const int2 = Number(2);
-    expect(Dyn.cast(int2).to<number>().isSome()).toBe(true);
+    expect(Dyn.cast(int2).to(Number).isSome()).toBe(true);
     const nonInt = "2";
-    expect(Dyn.cast(nonInt).to<number>().isSome()).toBe(true);
+    expect(Dyn.cast(nonInt).to(Number).isSome()).toBe(false);
 
     const foo = new Foo();
     const bar = new Bar();
-    expect(Dyn.cast(foo).to<Foo>().isSome()).toBe(true);
-    expect(Dyn.cast(bar).to<Bar>().isSome()).toBe(true);
-    expect(Dyn.cast(foo).to<Bar>().isSome()).toBe(true);
-    expect(Dyn.cast(bar).to<Foo>().isSome()).toBe(true);
+    expect(Dyn.cast(foo).to(Foo).isSome()).toBe(true);
+    expect(Dyn.cast(bar).to(Bar).isSome()).toBe(true);
+    expect(Dyn.cast(foo).to(Bar).isSome()).toBe(false);
+    expect(Dyn.cast(bar).to(Foo).isSome()).toBe(false);
 });
 
 test("testing TypeHelpers.stringIsNullishOrEmpty", () => {
@@ -120,25 +116,22 @@ test("testing TypeHelpers.stringIsNullishOrWhiteSpace", () => {
 
 test("testing Dyn.cast.to exceptions", () => {
     const strNull = null;
-    expect(() => Dyn.cast(strNull).to<string>()).toThrowError(
-        "Invalid"
-    );
-    expect(() => Dyn.cast(strNull).to<string>()).toThrowError(
-        "parameter"
-    );
-    expect(() => Dyn.cast(strNull).to<string>()).toThrowError(
-        "null"
-    );
+    expect(() => Dyn.cast(strNull).to(String)).toThrowError("Invalid");
+    expect(() => Dyn.cast(strNull).to(String)).toThrowError("parameter");
+    expect(() => Dyn.cast(strNull).to(String)).toThrowError("null");
     const strUndefined = undefined;
-    expect(() => Dyn.cast(strUndefined).to<string>()).toThrowError(
-        "Invalid"
-    );
-    expect(() => Dyn.cast(strUndefined).to<string>()).toThrowError(
-        "parameter"
-    );
-    expect(() => Dyn.cast(strUndefined).to<string>()).toThrowError(
-        "undefined"
-    );
+    expect(() => Dyn.cast(strUndefined).to(String)).toThrowError("Invalid");
+    expect(() => Dyn.cast(strUndefined).to(String)).toThrowError("parameter");
+    expect(() => Dyn.cast(strUndefined).to(String)).toThrowError("undefined");
+
+    const typeNull = null;
+    expect(() => Dyn.cast("foo").to(typeNull)).toThrowError("Invalid");
+    expect(() => Dyn.cast("foo").to(typeNull)).toThrowError("parameter");
+    expect(() => Dyn.cast("foo").to(typeNull)).toThrowError("null");
+    const typeUndefined = undefined;
+    expect(() => Dyn.cast("foo").to(typeUndefined)).toThrowError("Invalid");
+    expect(() => Dyn.cast("foo").to(typeUndefined)).toThrowError("parameter");
+    expect(() => Dyn.cast("foo").to(typeUndefined)).toThrowError("undefined");
 });
 
 function handleResult(result: Result<number, string>): string {
