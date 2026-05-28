@@ -4,7 +4,6 @@ import {
     Some,
     Option,
     Nothing,
-    OptionHelpers,
     Ok,
     Err,
     Result,
@@ -21,12 +20,12 @@ function typeGuard(option: Option<number>) {
 }
 
 function ofObj1(option: number | null): Option<number> {
-    const foo = OptionHelpers.ofObj(option);
+    const foo = Option.ofObj(option);
     return foo;
 }
 
 function ofObj2(option: number | undefined): Option<number> {
-    const foo = OptionHelpers.ofObj(option);
+    const foo = Option.ofObj(option);
     return foo;
 }
 
