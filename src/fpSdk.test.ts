@@ -172,7 +172,7 @@ test("testing Check.ifString().isNullishOrEmpty()", () => {
     const nullString: null | string = null;
     expect(Check.ifString(nullString).isNullishOrEmpty()).toBe(true);
     expect(Check.ifString(null as any).isNullishOrEmpty()).toBe(true);
-    const undefString: null | string = null;
+    const undefString: undefined | string = undefined;
     expect(Check.ifString(undefString).isNullishOrEmpty()).toBe(true);
     expect(Check.ifString(undefined as any).isNullishOrEmpty()).toBe(true);
     expect(Check.ifString("").isNullishOrEmpty()).toBe(true);
