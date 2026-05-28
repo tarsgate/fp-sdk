@@ -1,6 +1,5 @@
 // Export Option types
-export { None, Some, OptionHelpers, Nothing } from './option.js';
-export type { Option } from './option.js';
+export { None, Some, Nothing, Option } from './option.js';
 
 // Export Result types
 export { Err, Ok } from './result.js';

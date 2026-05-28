@@ -186,10 +186,10 @@ pipe(
 
 **fp-sdk**
 ```ts
-import { None, OptionHelpers, Option } from "fp-sdk";
+import { None, Option } from "fp-sdk";
 
 function findUser(id: number): Option<User> {
-    return OptionHelpers.ofObj(db.findById(id));
+    return Option.ofObj(db.findById(id));
 }
 
 const user = findUser(1);

@@ -41,8 +41,10 @@ export type Option<T> = (None | Some<NonNullable<T>>) & IOption;
 
 export const Nothing = new None();
 
-export class OptionHelpers {
-    public static ofObj<T>(obj: T | null | undefined): Option<NonNullable<T>> {
+// use Declaration Merging to attach the static ofObj function
+export namespace Option {
+    // Re-hydrates a plain JavaScript object or serialized data back into a valid Option instance.
+    export function ofObj<T>(obj: T | null | undefined): Option<NonNullable<T>> {
         if (obj === null || obj === undefined) {
             return Nothing;
         } else {
