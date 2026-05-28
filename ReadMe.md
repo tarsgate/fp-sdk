@@ -131,7 +131,7 @@ Before looking at code, a word on bloat — because **size / complexity** matter
 
 | Aspect                     | Raw TS    | Effect.ts                                                                    | fp-sdk                                                                        |
 | ---                        | ---       | ---                                                                          | ---                                                                           |
-| Installed/unpacked size.   | N/A (0)   | ❌ [~27 MB](https://npmgraph.js.org/?q=effect#select=effect%403.21.2)        | ✅ [~27 KB](https://npmgraph.js.org/?q=fp-sdk#select=fp-sdk%400.1.2)          |
+| Installed/unpacked size    | N/A (0)   | ❌ [~27 MB](https://npmgraph.js.org/?q=effect#select=effect%403.21.2)        | ✅ [~27 KB](https://npmgraph.js.org/?q=fp-sdk#select=fp-sdk%400.1.2)          |
 | Zero external dependencies | ✅ Yes: 0 | ❌ No: [2 deps](https://www.npmjs.com/package/effect?activeTab=dependencies) | ✅ Yes: [0 deps](https://www.npmjs.com/package/fp-sdk?activeTab=dependencies) |
 
 ---
@@ -204,12 +204,12 @@ if (user instanceof None) {
 }
 ```
 
-| Aspect                           | Raw TS                  | Effect.ts                            | fp-sdk                |
-| ---                              | ---                     | ---                                  | ---                   |
-| Clean return type                | ✅ `User \| null`       | ❌ `Option.Option<User>` duplication | ✅ `Option<User>`     |
-| Clean absence check              | ❌ `=== null` typo risk | ❌ Nested callbacks                  | ✅ `instanceof None`  |
-| Branching style                  | ✅ Natural `if/else`    | ❌ `pipe` + `match` ceremony         | ✅ Natural `if/else`  |
-| Forces handling the "empty" case | ❌ No                   | ✅ Yes                               | ✅ Yes                |
+| Aspect                           | Raw TS                  | Effect.ts                            | fp-sdk                     |
+| ---                              | ---                     | ---                                  | ---                        |
+| Clean return type                | ✅ `User \| null`       | ❌ `Option.Option<User>` duplication | ✅ `Option<User>`          |
+| Clean absence check              | ❌ `=== null` typo risk | ❌ Nested callbacks                  | ✅ `instanceof` Some/None  |
+| Branching style                  | ✅ Natural `if`/`else`  | ❌ `pipe` + `match` ceremony         | ✅ Natural `if`/`else`     |
+| Forces handling the "empty" case | ❌ No                   | ✅ Yes                               | ✅ Yes                     |
 
 ---
 
@@ -292,7 +292,7 @@ if (result instanceof Err) {
 | ---                             | ---                               | ---                                   | ---                          |
 | Clear error/success naming      | TBD: As good as your boilerplate  | ❌ `Left` / `Right` weird jargon      | ✅ `Err` / `Ok` simple terms |
 | Clean return type               | ❌ `{ ok, ... }` boilerplate      | ❌ `Either.Either<TL,TR>` duplication | ✅ `Result<TOk,TErr>`        |
-| Branching style                 | ✅ Natural `if/else`              | ❌ 2 "arrow" callbacks ceremony.      | ✅ Natural `if/else`         |
+| Branching style                 | ✅ Natural `if`/`else`            | ❌ 2 "arrow" callbacks ceremony       | ✅ Natural `if`/`else`       |
 ---
 
 ### 3. Type Helpers
