@@ -7,6 +7,7 @@ import {
     Ok,
     Err,
     Result,
+    Dyn,
     Check,
 } from "./index.js";
 
@@ -68,73 +69,111 @@ class Bar {
     }
 }
 
-test("testing Check.if().is()", () => {
+test("testing Dyn.cast().to()", () => {
     const str1 = "foo";
-    expect(Check.if(str1).is(String)).toBe(true);
+    expect(Dyn.cast(str1).to(String).isSome()).toBe(true);
     const str2 = String("foo");
-    expect(Check.if(str2).is(String)).toBe(true);
+    expect(Dyn.cast(str2).to(String).isSome()).toBe(true);
 
     let str3 = 'foo';
-    expect(Check.if(str3).is(String)).toBe(true);
+    expect(Dyn.cast(str3).to(String).isSome()).toBe(true);
 
     const nonStr = 3;
-    expect(Check.if(nonStr).is(String)).toBe(false);
+    expect(Dyn.cast(nonStr).to(String).isSome()).toBe(false);
 
     const int1 = 2;
-    expect(Check.if(int1).is(Number)).toBe(true);
+    expect(Dyn.cast(int1).to(Number).isSome()).toBe(true);
     const int2 = Number(2);
-    expect(Check.if(int2).is(Number)).toBe(true);
+    expect(Dyn.cast(int2).to(Number).isSome()).toBe(true);
     const nonInt = "2";
-    expect(Check.if(nonInt).is(Number)).toBe(false);
+    expect(Dyn.cast(nonInt).to(Number).isSome()).toBe(false);
 
     const foo = new Foo();
     const bar = new Bar();
-    expect(Check.if(foo).is(Foo)).toBe(true);
-    expect(Check.if(bar).is(Bar)).toBe(true);
-    expect(Check.if(foo).is(Bar)).toBe(false);
-    expect(Check.if(bar).is(Foo)).toBe(false);
+    expect(Dyn.cast(foo).to(Foo).isSome()).toBe(true);
+    expect(Dyn.cast(bar).to(Bar).isSome()).toBe(true);
+    expect(Dyn.cast(foo).to(Bar).isSome()).toBe(false);
+    expect(Dyn.cast(bar).to(Foo).isSome()).toBe(false);
+});
+
+test("same as 'testing Dyn.cast().to()' but with explicit types", () => {
+    const str1 = "foo";
+    let castStr1:Option<string> = Dyn.cast(str1).to(String);
+    expect(castStr1.isSome()).toBe(true);
+    const str2 = String("foo");
+    let castStr2:Option<string> = Dyn.cast(str2).to(String);
+    expect(castStr2.isSome()).toBe(true);
+
+    let str3 = 'foo';
+    let castStr3:Option<string> = Dyn.cast(str3).to(String);
+    expect(castStr3.isSome()).toBe(true);
+
+    const nonStr = 3;
+    let castNonStr:Option<string> = Dyn.cast(nonStr).to(String);
+    expect(castNonStr.isSome()).toBe(false);
+
+    const int1 = 2;
+    let castInt1:Option<number> = Dyn.cast(int1).to(Number);
+    expect(castInt1.isSome()).toBe(true);
+    const int2 = Number(2);
+    let castInt2:Option<number> = Dyn.cast(int2).to(Number);
+    expect(castInt2.isSome()).toBe(true);
+    const nonInt = "2";
+    let castNonInt:Option<number> = Dyn.cast(nonInt).to(Number);
+    expect(castNonInt.isSome()).toBe(false);
+
+    const foo = new Foo();
+    const bar = new Bar();
+    let castFooToFoo:Option<Foo> = Dyn.cast(foo).to(Foo);
+    expect(castFooToFoo.isSome()).toBe(true);
+    let castBarToBar:Option<Bar> = Dyn.cast(bar).to(Bar);
+    expect(castBarToBar.isSome()).toBe(true);
+    let castFooToBar:Option<Bar> = Dyn.cast(foo).to(Bar);
+    expect(castFooToBar.isSome()).toBe(false);
+    let castBarToFoo:Option<Foo> = Dyn.cast(bar).to(Foo);
+    expect(castBarToFoo.isSome()).toBe(false);
 });
 
 test("testing Check.if().is() exceptions", () => {
     const strNull = null;
-    expect(() => Check.if(strNull).is(String)).toThrowError(
+    expect(() => Dyn.cast(strNull).to(String)).toThrowError(
         "Invalid"
     );
-    expect(() => Check.if(strNull).is(String)).toThrowError(
+    expect(() => Dyn.cast(strNull).to(String)).toThrowError(
         "parameter"
     );
-    expect(() => Check.if(strNull).is(String)).toThrowError(
+    expect(() => Dyn.cast(strNull).to(String)).toThrowError(
         "null"
     );
     const strUndefined = undefined;
-    expect(() => Check.if(strUndefined).is(String)).toThrowError(
+    expect(() => Dyn.cast(strUndefined).to(String)).toThrowError(
         "Invalid"
     );
-    expect(() => Check.if(strUndefined).is(String)).toThrowError(
+    expect(() => Dyn.cast(strUndefined).to(String)).toThrowError(
         "parameter"
     );
-    expect(() => Check.if(strUndefined).is(String)).toThrowError(
+    expect(() => Dyn.cast(strUndefined).to(String)).toThrowError(
         "undefined"
     );
 
     const typeNull = null;
-    expect(() => Check.if("foo").is(typeNull)).toThrowError(
+    expect(() => Dyn.cast("foo").to(typeNull)).toThrowError(
         "Invalid"
     );
-    expect(() => Check.if("foo").is(typeNull)).toThrowError(
+    expect(() => Dyn.cast("foo").to(typeNull)).toThrowError(
         "parameter"
     );
-    expect(() => Check.if("foo").is(typeNull)).toThrowError(
+    expect(() => Dyn.cast("foo").to(typeNull)).toThrowError(
         "null"
     );
     const typeUndefined = undefined;
-    expect(() => Check.if("foo").is(typeUndefined)).toThrowError(
+    expect(() => Dyn.cast("foo").to(typeUndefined)).toThrowError(
         "Invalid"
     );
-    expect(() => Check.if("foo").is(typeUndefined)).toThrowError(
+    expect(() => Dyn.cast("foo").to(typeUndefined)).toThrowError(
         "parameter"
     );
-    expect(() => Check.if("foo").is(typeUndefined)).toThrowError(
+    expect(() => Dyn.cast("foo").to(typeUndefined)).toThrowError(
         "undefined"
     );
 });

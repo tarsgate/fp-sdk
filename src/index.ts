@@ -8,4 +8,4 @@ export type { Result } from './result.js';
 // Export helpers
 export { Check } from './check.js';
 export { Empty } from './empty.js';
-
+export { Dyn } from './dyn.js';
