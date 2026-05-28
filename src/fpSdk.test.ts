@@ -7,7 +7,7 @@ import {
     Ok,
     Err,
     Result,
-    TypeHelpers,
+    Check,
 } from "./index.js";
 
 function typeGuard(option: Option<number>) {
@@ -68,74 +68,73 @@ class Bar {
     }
 }
 
-test("testing TypeHelpers.IsInstanceOf", () => {
+test("testing Check.if().is()", () => {
     const str1 = "foo";
-    expect(TypeHelpers.isInstanceOf(str1, String)).toBe(true);
+    expect(Check.if(str1).is(String)).toBe(true);
     const str2 = String("foo");
-    expect(TypeHelpers.isInstanceOf(str2, String)).toBe(true);
+    expect(Check.if(str2).is(String)).toBe(true);
 
-    //commented this one because prettier complains about it, but it works:
-    //let str3 = 'foo';
-    //expect(TypeHelpers.isInstanceOf(str3, String)).toBe(true);
+    let str3 = 'foo';
+    expect(Check.if(str3).is(String)).toBe(true);
 
     const nonStr = 3;
-    expect(TypeHelpers.isInstanceOf(nonStr, String)).toBe(false);
+    expect(Check.if(nonStr).is(String)).toBe(false);
 
     const int1 = 2;
-    expect(TypeHelpers.isInstanceOf(int1, Number)).toBe(true);
+    expect(Check.if(int1).is(Number)).toBe(true);
     const int2 = Number(2);
-    expect(TypeHelpers.isInstanceOf(int2, Number)).toBe(true);
+    expect(Check.if(int2).is(Number)).toBe(true);
     const nonInt = "2";
-    expect(TypeHelpers.isInstanceOf(nonInt, Number)).toBe(false);
+    expect(Check.if(nonInt).is(Number)).toBe(false);
 
     const foo = new Foo();
     const bar = new Bar();
-    expect(TypeHelpers.isInstanceOf(foo, Foo)).toBe(true);
-    expect(TypeHelpers.isInstanceOf(bar, Bar)).toBe(true);
-    expect(TypeHelpers.isInstanceOf(foo, Bar)).toBe(false);
-    expect(TypeHelpers.isInstanceOf(bar, Foo)).toBe(false);
+    expect(Check.if(foo).is(Foo)).toBe(true);
+    expect(Check.if(bar).is(Bar)).toBe(true);
+    expect(Check.if(foo).is(Bar)).toBe(false);
+    expect(Check.if(bar).is(Foo)).toBe(false);
 });
 
-test("testing TypeHelpers.isInstanceOf exceptions", () => {
+test("testing Check.if().is() exceptions", () => {
     const strNull = null;
-    expect(() => TypeHelpers.isInstanceOf(strNull, String)).toThrowError(
+    expect(() => Check.if(strNull).is(String)).toThrowError(
         "Invalid"
     );
-    expect(() => TypeHelpers.isInstanceOf(strNull, String)).toThrowError(
+    expect(() => Check.if(strNull).is(String)).toThrowError(
         "parameter"
     );
-    expect(() => TypeHelpers.isInstanceOf(strNull, String)).toThrowError(
+    expect(() => Check.if(strNull).is(String)).toThrowError(
         "null"
     );
     const strUndefined = undefined;
-    expect(() => TypeHelpers.isInstanceOf(strUndefined, String)).toThrowError(
+    expect(() => Check.if(strUndefined).is(String)).toThrowError(
         "Invalid"
     );
-    expect(() => TypeHelpers.isInstanceOf(strUndefined, String)).toThrowError(
+    expect(() => Check.if(strUndefined).is(String)).toThrowError(
         "parameter"
     );
-    expect(() => TypeHelpers.isInstanceOf(strUndefined, String)).toThrowError(
+    expect(() => Check.if(strUndefined).is(String)).toThrowError(
         "undefined"
     );
 
     const typeNull = null;
-    expect(() => TypeHelpers.isInstanceOf("foo", typeNull)).toThrowError(
+    expect(() => Check.if("foo").is(typeNull)).toThrowError(
         "Invalid"
     );
-    expect(() => TypeHelpers.isInstanceOf("foo", typeNull)).toThrowError(
+    expect(() => Check.if("foo").is(typeNull)).toThrowError(
         "parameter"
     );
-    expect(() => TypeHelpers.isInstanceOf("foo", typeNull)).toThrowError(
+    expect(() => Check.if("foo").is(typeNull)).toThrowError(
         "null"
     );
     const typeUndefined = undefined;
-    expect(() => TypeHelpers.isInstanceOf("foo", typeUndefined)).toThrowError(
+    expect(() => Check.if("foo").is(typeUndefined)).toThrowError(
         "Invalid"
     );
-    expect(() => TypeHelpers.isInstanceOf("foo", typeUndefined)).toThrowError(
+    expect(() => Check.if("foo").is(typeUndefined)).toThrowError(
         "parameter"
     );
-    expect(() => TypeHelpers.isInstanceOf("foo", typeUndefined)).toThrowError(
+    expect(() => Check.if("foo").is(typeUndefined)).toThrowError(
         "undefined"
     );
 });
