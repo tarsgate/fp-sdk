@@ -164,3 +164,30 @@ test("testing Result Is methods", () => {
     expect(errResult.isOk()).toBe(false);
     expect(errResult.isErr()).toBe(true);
 });
+
+
+// dotnet-style APIs...
+
+test("testing Check.ifString().isNullishOrEmpty()", () => {
+    const nullString: null | string = null;
+    expect(Check.ifString(nullString).isNullishOrEmpty()).toBe(true);
+    expect(Check.ifString(null as any).isNullishOrEmpty()).toBe(true);
+    const undefString: null | string = null;
+    expect(Check.ifString(undefString).isNullishOrEmpty()).toBe(true);
+    expect(Check.ifString(undefined as any).isNullishOrEmpty()).toBe(true);
+    expect(Check.ifString("").isNullishOrEmpty()).toBe(true);
+    expect(Check.ifString("hello").isNullishOrEmpty()).toBe(false);
+    expect(Check.ifString(" ").isNullishOrEmpty()).toBe(false);
+});
+
+test("testing Check.ifString().isNullishOrWhiteSpace()", () => {
+    expect(Check.ifString(null as any).isNullishOrWhiteSpace()).toBe(true);
+    expect(Check.ifString(undefined as any).isNullishOrWhiteSpace()).toBe(true);
+    expect(Check.ifString("").isNullishOrWhiteSpace()).toBe(true);
+    expect(Check.ifString(" ").isNullishOrWhiteSpace()).toBe(true);
+    expect(Check.ifString("\t").isNullishOrWhiteSpace()).toBe(true);
+    expect(Check.ifString("\n").isNullishOrWhiteSpace()).toBe(true);
+    expect(Check.ifString("   \t\n  ").isNullishOrWhiteSpace()).toBe(true);
+    expect(Check.ifString("hello").isNullishOrWhiteSpace()).toBe(false);
+    expect(Check.ifString(" hello ").isNullishOrWhiteSpace()).toBe(false);
+});

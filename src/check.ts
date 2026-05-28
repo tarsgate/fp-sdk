@@ -31,4 +31,25 @@ export class Check {
             }
         }
     }
+
+    public static ifString(str: string) {
+        return {
+            isNullishOrEmpty(): boolean {
+                if (Check.isNullOrUndefined(str)) {
+                    return true;
+                }
+                if (str.length === 0) {
+                    return true;
+                }
+                return false;
+            },
+
+            isNullishOrWhiteSpace(): boolean {
+                if (Check.ifString(str).isNullishOrEmpty()) {
+                    return true;
+                }
+                return str.trim().length === 0;
+            }
+        }
+    }
 }
