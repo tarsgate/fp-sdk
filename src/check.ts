@@ -1,21 +1,16 @@
 export class Check {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- method accepts any value by design
-    public static isNullOrUndefined(variable: any) {
-        return variable === null || variable === undefined;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- method accepts any value by design
     public static if(variable: any) {
         // because instanceof doesn't work with primitive types (e.g. String), taken from https://stackoverflow.com/a/58184883/544947
         return {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any -- method accepts any value by design
             is(type: any): boolean {
-                if (Check.isNullOrUndefined(variable)) {
+                if (Check.if(variable).isNullish()) {
                     throw new Error(
                         "Invalid 'variable' parameter passed in: null or undefined"
                     );
                 }
-                if (Check.isNullOrUndefined(type)) {
+                if (Check.if(type).isNullish()) {
                     throw new Error(
                         "Invalid 'type' parameter passed in: null or undefined"
                     );
@@ -28,6 +23,17 @@ export class Check {
                     res = variable.constructor == type;
                 }
                 return res;
+            },
+
+            /**
+             * @deprecated use isNullish() instead
+             **/
+            isNullOrUndefined() {
+                return Check.if(variable).isNullish();
+            },
+
+            isNullish() {
+                return variable === null || variable === undefined;
             }
         }
     }
@@ -35,7 +41,7 @@ export class Check {
     public static ifString(str: string) {
         return {
             isNullishOrEmpty(): boolean {
-                if (Check.isNullOrUndefined(str)) {
+                if (Check.if(str).isNullish()) {
                     return true;
                 }
                 if (str.length === 0) {
