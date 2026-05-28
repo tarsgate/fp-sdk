@@ -125,10 +125,10 @@ Enter **fp-sdk**.
 
 Before looking at code, a word on bloat — because **size / complexity** matters:
 
-| Aspect                  | Raw TS  | Effect.ts                                                                | fp-sdk                                                                   |
-| ---                     | ---     | ---                                                                      | ---                                                                      |
-| Installed/unpacked size | N/A (0) | ❌ [~27 MB](https://npmgraph.js.org/?q=effect#select=effect%403.21.2)    | ✅ [~27 KB](https://npmgraph.js.org/?q=fp-sdk#select=fp-sdk%400.1.2)     |
-| External dependencies   | N/A (0) | ❌ [2 deps](https://www.npmjs.com/package/effect?activeTab=dependencies) | ✅ [0 deps](https://www.npmjs.com/package/fp-sdk?activeTab=dependencies) |
+| Aspect                     | Raw TS    | Effect.ts                                                                    | fp-sdk                                                                        |
+| ---                        | ---       | ---                                                                          | ---                                                                           |
+| Installed/unpacked size.   | N/A (0)   | ❌ [~27 MB](https://npmgraph.js.org/?q=effect#select=effect%403.21.2)        | ✅ [~27 KB](https://npmgraph.js.org/?q=fp-sdk#select=fp-sdk%400.1.2)          |
+| Zero external dependencies | ✅ Yes: 0 | ❌ No: [2 deps](https://www.npmjs.com/package/effect?activeTab=dependencies) | ✅ Yes: [0 deps](https://www.npmjs.com/package/fp-sdk?activeTab=dependencies) |
 
 ---
 
@@ -200,12 +200,12 @@ if (user instanceof None) {
 }
 ```
 
-| Aspect                           | Raw TS                           | Effect.ts                        | fp-sdk                                    |
-| ---                              | ---                              | ---                              | ---                                       |
-| Clean return type                | ✅ `User \| null`                | ❌ `Option.Option<User>`         | ✅ `Option<User>`                         |
-| Explicit absence check           | ❌ `=== null` typo risk          | ❌ nested callbacks              | ✅ `instanceof None`                      |
-| Branching style                  | ✅ natural `if/else`             | ❌ `pipe` + `match` ceremony     | ✅ natural `if/else`                      |
-| Forces handling the "empty" case | ❌ no                            | ✅ yes                           | ✅ yes                                    |
+| Aspect                           | Raw TS                  | Effect.ts                            | fp-sdk                |
+| ---                              | ---                     | ---                                  | ---                   |
+| Clean return type                | ✅ `User \| null`       | ❌ `Option.Option<User>` duplication | ✅ `Option<User>`     |
+| Clean absence check              | ❌ `=== null` typo risk | ❌ Nested callbacks                  | ✅ `instanceof None`  |
+| Branching style                  | ✅ Natural `if/else`    | ❌ `pipe` + `match` ceremony         | ✅ Natural `if/else`  |
+| Forces handling the "empty" case | ❌ No                   | ✅ Yes                               | ✅ Yes                |
 
 ---
 
@@ -215,7 +215,7 @@ A computation that might fail.
 
 **Raw TypeScript (no library)**
 ```ts
-type Result<T, E> = { ok: true; value: T } | { ok: false; error: E };
+type Result<TOk, TErr> = { ok: true; value: TOk } | { ok: false; error: TErr };
 
 function parseNumber(input: string): Result<number, string> {
     const n = Number(input);
@@ -284,12 +284,11 @@ if (result instanceof Err) {
 }
 ```
 
-| Aspect                          | Raw TS                                   | Effect.ts                                | fp-sdk                                   |
-| ---                             | ---                                      | ---                                      | ---                                      |
-| Clear error/success naming      | ✅                                       | ❌ `Left` / `Right` weird jargon         | ✅ `Err` / `Ok` simple terms             |
-| Clean return type               | ❌ `{ ok, ... }` boilerplate             | ❌ `Either.Either<E,T>` duplication      | ✅ `Result<T,E>`                         |
-| Mistake-proof branching         | ❌ `!result.ok` is subtle                | ❌ `onLeft` / `onRight` arrows           | ✅ `instanceof Err`                      |
-| Branching style                 | ✅ natural `if/else`                     | ❌ object with 2 callbacks               | ✅ natural `if/else`                     |
+| Aspect                          | Raw TS                            | Effect.ts                             | fp-sdk                       |
+| ---                             | ---                               | ---                                   | ---                          |
+| Clear error/success naming      | TBD: As good as your boilerplate  | ❌ `Left` / `Right` weird jargon      | ✅ `Err` / `Ok` simple terms |
+| Clean return type               | ❌ `{ ok, ... }` boilerplate      | ❌ `Either.Either<TL,TR>` duplication | ✅ `Result<TOk,TErr>`        |
+| Branching style                 | ✅ Natural `if/else`              | ❌ 2 "arrow" callbacks ceremony.      | ✅ Natural `if/else`         |
 ---
 
 ### 3. Type Helpers
@@ -388,11 +387,11 @@ console.log(TypeHelpers.isInstanceOf(foo, Foo));
 console.log(TypeHelpers.isInstanceOf(foo, Bar));
 ```
 
-| Aspect                            | Raw TS                           | Effect.ts                                     | fp-sdk                               |
-| ---                               | ---                              | ---                                           | ---                                  |
-| One API for primitives + classes  | ❌ `typeof` vs `constructor`     | ❌ `Predicate` + `Schema` split               | ✅ `isInstanceOf` unified            |
-| Typo-proof primitive checks       | ❌ `"string"` can be misspelled  | ✅                                            | ✅ pass `String` constructor         |
-| `===` assignment/typo risk        | ❌ `=` or `==` trap              | ✅                                            | ✅                                   |
-| Boolean result (no throw)         | ✅ `typeof` / manual helper      | ❌ `Schema` throws unless wrapped             | ✅ `boolean` always                  |
-| Argument order (value, then type) | ✅                               | ❌ `Schema.instanceOf(type)(value)` backwards | ✅ `isInstanceOf(value, type)`       |
+| Aspect                                | Raw TS                            | Effect.ts                                         | fp-sdk                              |
+| ---                                   | ---                               | ---                                               | ---                                 |
+| Single API for primitives&classes     | ❌ No: `typeof` vs `constructor`  | ❌ No: `Predicate` vs `Schema` split              | ✅ Yes: `isInstanceOf` unified      |
+| Strongly typed (vs "Stringly" typed)  | ❌ No: `"string"` misspell risk   | ✅ Yes: pass `String` constructor                 | ✅ Yes: pass `String` constructor   |
+| `==` vs `===` typo risk               | ❌ Yes                            | ✅ No risk                                        | ✅ No risk                          |
+| Side-effect free (no try boilerplate) | ✅ Yes (`typeof` / manual helper) | ❌ No: `Schema` API throws unless wrapped         | ✅ Yes: `boolean` always            |
+| Natural arg order (value, then type)  | ✅ Yes (typeof str === "string")  | ❌ No: `Schema.instanceOf(type)(value)` backwards | ✅ Yes: `isInstanceOf(value, type)` |
 
