@@ -206,7 +206,6 @@ if (user instanceof None) {
 | Explicit absence check           | ❌ `=== null` typo risk          | ❌ nested callbacks              | ✅ `instanceof None`                      |
 | Branching style                  | ✅ natural `if/else`             | ❌ `pipe` + `match` ceremony     | ✅ natural `if/else`                      |
 | Forces handling the "empty" case | ❌ no                            | ✅ yes                           | ✅ yes                                    |
-| Safe without `strictNullChecks`  | ❌ no type safety without strict | ❌ no enforcement without strict | ✅ runtime `instanceof None` always works |
 
 ---
 
@@ -291,8 +290,6 @@ if (result instanceof Err) {
 | Clean return type               | ❌ `{ ok, ... }` boilerplate             | ❌ `Either.Either<E,T>` duplication      | ✅ `Result<T,E>`                         |
 | Mistake-proof branching         | ❌ `!result.ok` is subtle                | ❌ `onLeft` / `onRight` arrows           | ✅ `instanceof Err`                      |
 | Branching style                 | ✅ natural `if/else`                     | ❌ object with 2 callbacks               | ✅ natural `if/else`                     |
-| Safe without `strictNullChecks` | ❌ `!result.ok` invisible without strict | ❌ `Either` guard ignored without strict | ✅ runtime `instanceof Err` always works |
-
 ---
 
 ### 3. Type Helpers
@@ -398,4 +395,4 @@ console.log(TypeHelpers.isInstanceOf(foo, Bar));
 | `===` assignment/typo risk        | ❌ `=` or `==` trap              | ✅                                            | ✅                                   |
 | Boolean result (no throw)         | ✅ `typeof` / manual helper      | ❌ `Schema` throws unless wrapped             | ✅ `boolean` always                  |
 | Argument order (value, then type) | ✅                               | ❌ `Schema.instanceOf(type)(value)` backwards | ✅ `isInstanceOf(value, type)`       |
-| Safe without `strictNullChecks`   | ❌ loses compile-time protection | ❌ `Schema` throws at runtime instead         | ✅ runtime `instanceof` always works |
+
