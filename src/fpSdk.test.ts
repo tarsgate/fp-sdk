@@ -178,6 +178,35 @@ test("testing Check.if().is() exceptions", () => {
     );
 });
 
+test("testing that Dyn.tryCast doesn't throw exceptions for 1st param, but does for 2nd", () => {
+    const strNull = null;
+    expect(Dyn.tryCast(strNull).to(String).isSome()).toBe(false);
+
+    const strUndefined = undefined;
+    expect(Dyn.tryCast(strUndefined).to(String).isSome()).toBe(false);
+
+    const typeNull = null;
+    expect(() => Dyn.tryCast("foo").to(typeNull)).toThrowError(
+        "Invalid"
+    );
+    expect(() => Dyn.tryCast("foo").to(typeNull)).toThrowError(
+        "parameter"
+    );
+    expect(() => Dyn.tryCast("foo").to(typeNull)).toThrowError(
+        "null"
+    );
+    const typeUndefined = undefined;
+    expect(() => Dyn.tryCast("foo").to(typeUndefined)).toThrowError(
+        "Invalid"
+    );
+    expect(() => Dyn.tryCast("foo").to(typeUndefined)).toThrowError(
+        "parameter"
+    );
+    expect(() => Dyn.tryCast("foo").to(typeUndefined)).toThrowError(
+        "undefined"
+    );
+});
+
 function handleResult(result: Result<number, string>): string {
     if (result instanceof Err) {
         return `Error: ${result.error}`;

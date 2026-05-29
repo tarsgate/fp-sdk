@@ -50,4 +50,21 @@ export namespace Dyn {
             }
         };
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    export function tryCast(variable: any) {
+        return {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            to<TCtor extends Constructor<any>>(
+                type: TCtor
+            ): Option<
+                TCtor extends StringConstructor ? string :
+                TCtor extends NumberConstructor ? number :
+                TCtor extends BooleanConstructor ? boolean :
+                InstanceType<TCtor>
+            > {
+                throw new Error("Not implemented")
+            }
+        };
+    }
 }
