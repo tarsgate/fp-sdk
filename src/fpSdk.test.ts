@@ -134,7 +134,7 @@ test("same as 'testing Dyn.cast().to()' but with explicit types", () => {
     expect(castBarToFoo.isSome()).toBe(false);
 });
 
-test("testing Check.if().is() exceptions", () => {
+test("testing Dyn.cast().to() exceptions", () => {
     const strNull = null;
     expect(() => Dyn.cast(strNull).to(String)).toThrowError(
         "Invalid"
