@@ -1,7 +1,7 @@
 {
   "name": "fp-sdk",
-  "version": "0.3.0",
-  "description": "A lightweight functional programming SDK for TypeScript - Option types and utilities without the bloat",
+  "version": "0.5.0",
+  "description": "An extremely lightweight Functional-Programming SDK for TypeScript: Option/Result types & dynamic casting without bloat",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
