@@ -295,7 +295,7 @@ if (result instanceof Err) {
 | Branching style                 | ✅ Natural `if`/`else`            | ❌ 2 "arrow" callbacks ceremony       | ✅ Natural `if`/`else`       |
 ---
 
-### 3. Type Guards
+### 3. Type Guards / Dynamic Casting
 
 Check if a value is an instance of a given type.
 
@@ -368,7 +368,7 @@ console.log(isInstanceOf(foo, Bar));
 
 **fp-sdk**
 ```ts
-import { Check } from "fp-sdk";
+import { Dyn } from "fp-sdk";
 
 class Foo {}
 class Bar {}
@@ -378,24 +378,24 @@ const n = 42;
 const foo = new Foo();
 
 // prints true
-console.log(Check.if(str).is(String));
+console.log(Dyn.cast(str).to(String).isSome());
 // prints false
-console.log(Check.if(n).is(String));
+console.log(Dyn.cast(n).to(String).isSome());
 // prints true
-console.log(Check.if(n).is(Number));
+console.log(Dyn.cast(n).to(Number).isSome());
 // prints false
-console.log(Check.if(str).is(Number));
+console.log(Dyn.cast(str).to(Number).isSome());
 // prints true
-console.log(Check.if(foo).is(Foo));
+console.log(Dyn.cast(foo).to(Foo).isSome());
 // prints false
-console.log(Check.if(foo).is(Bar));
+console.log(Dyn.cast(foo).to(Bar).isSome());
 ```
 
 | Aspect                                | Raw TS                            | Effect.ts                                         | fp-sdk                              |
 | ---                                   | ---                               | ---                                               | ---                                 |
-| Single API for primitives&classes     | ❌ No: `typeof` vs `constructor`  | ❌ No: `Predicate` vs `Schema` split              | ✅ Yes: `Check.if().is()` unified      |
+| Single API for primitives&classes     | ❌ No: `typeof` vs `constructor`  | ❌ No: `Predicate` vs `Schema` split              | ✅ Yes: `Dyn.cast().to()` unified   |
 | Strongly typed (vs "Stringly" typed)  | ❌ No: `"string"` misspell risk   | ✅ Yes: pass `String` constructor                 | ✅ Yes: pass `String` constructor   |
 | `==` vs `===` typo risk               | ❌ Yes                            | ✅ No risk                                        | ✅ No risk                          |
 | Side-effect free (no try boilerplate) | ✅ Yes (`typeof` / manual helper) | ❌ No: `Schema` API throws unless wrapped         | ✅ Yes: `boolean` always            |
-| Natural arg order (value, then type)  | ✅ Yes (typeof str === "string")  | ❌ No: `Schema.instanceOf(type)(value)` backwards | ✅ Yes: `.if(value).is(type)` |
+| Natural arg order (value, then type)  | ✅ Yes (typeof str === "string")  | ❌ No: `Schema.instanceOf(type)(value)` backwards | ✅ Yes: `.cast(value).to(type)`     |
 
