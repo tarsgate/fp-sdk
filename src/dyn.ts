@@ -63,7 +63,11 @@ export namespace Dyn {
                 TCtor extends BooleanConstructor ? boolean :
                 InstanceType<TCtor>
             > {
-                throw new Error("Not implemented")
+                if (Check.if(variable).isNullish()) {
+                    return Nothing;
+                }
+
+                return Dyn.cast(variable).to(type);
             }
         };
     }
