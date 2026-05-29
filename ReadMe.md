@@ -378,24 +378,24 @@ const n = 42;
 const foo = new Foo();
 
 // prints true
-console.log(Dyn.cast(str).to(String).isSome());
+console.log(Dyn.tryCast(str).to(String).isSome());
 // prints false
-console.log(Dyn.cast(n).to(String).isSome());
+console.log(Dyn.tryCast(n).to(String).isSome());
 // prints true
-console.log(Dyn.cast(n).to(Number).isSome());
+console.log(Dyn.trycCast(n).to(Number).isSome());
 // prints false
-console.log(Dyn.cast(str).to(Number).isSome());
+console.log(Dyn.tryCast(str).to(Number).isSome());
 // prints true
-console.log(Dyn.cast(foo).to(Foo).isSome());
+console.log(Dyn.tryCast(foo).to(Foo).isSome());
 // prints false
-console.log(Dyn.cast(foo).to(Bar).isSome());
+console.log(Dyn.tryCast(foo).to(Bar).isSome());
 ```
 
-| Aspect                                | Raw TS                            | Effect.ts                                         | fp-sdk                              |
-| ---                                   | ---                               | ---                                               | ---                                 |
-| Single API for primitives&classes     | ❌ No: `typeof` vs `constructor`  | ❌ No: `Predicate` vs `Schema` split              | ✅ Yes: `Dyn.cast().to()` unified   |
-| Strongly typed (vs "Stringly" typed)  | ❌ No: `"string"` misspell risk   | ✅ Yes: pass `String` constructor                 | ✅ Yes: pass `String` constructor   |
-| `==` vs `===` typo risk               | ❌ Yes                            | ✅ No risk                                        | ✅ No risk                          |
-| Side-effect free (no try boilerplate) | ✅ Yes (`typeof` / manual helper) | ❌ No: `Schema` API throws unless wrapped         | ✅ Yes: `boolean` always            |
-| Natural arg order (value, then type)  | ✅ Yes (typeof str === "string")  | ❌ No: `Schema.instanceOf(type)(value)` backwards | ✅ Yes: `.cast(value).to(type)`     |
+| Aspect                                | Raw TS                            | Effect.ts                                         | fp-sdk                               |
+| ---                                   | ---                               | ---                                               | ---                                  |
+| Single API for primitives&classes     | ❌ No: `typeof` vs `constructor`  | ❌ No: `Predicate` vs `Schema` split              | ✅ Yes: `Dyn.tryCast().to()` unified |
+| Strongly typed (vs "Stringly" typed)  | ❌ No: `"string"` misspell risk   | ✅ Yes: pass `String` constructor                 | ✅ Yes: pass `String` constructor    |
+| `==` vs `===` typo risk               | ❌ Yes                            | ✅ No risk                                        | ✅ No risk                           |
+| Side-effect free (no try boilerplate) | ✅ Yes (`typeof` / manual helper) | ❌ No: `Schema` API throws unless wrapped         | ✅ Yes: `boolean` always             |
+| Natural arg order (value, then type)  | ✅ Yes (typeof str === "string")  | ❌ No: `Schema.instanceOf(type)(value)` backwards | ✅ Yes: `.tryCast(value).to(type)`   |
 

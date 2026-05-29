@@ -134,7 +134,7 @@ test("same as 'testing Dyn.cast().to()' but with explicit types", () => {
     expect(castBarToFoo.isSome()).toBe(false);
 });
 
-test("testing Check.if().is() exceptions", () => {
+test("testing Dyn.cast().to() exceptions", () => {
     const strNull = null;
     expect(() => Dyn.cast(strNull).to(String)).toThrowError(
         "Invalid"
@@ -174,6 +174,35 @@ test("testing Check.if().is() exceptions", () => {
         "parameter"
     );
     expect(() => Dyn.cast("foo").to(typeUndefined)).toThrowError(
+        "undefined"
+    );
+});
+
+test("testing that Dyn.tryCast doesn't throw exceptions for 1st param, but does for 2nd", () => {
+    const strNull = null;
+    expect(Dyn.tryCast(strNull).to(String).isSome()).toBe(false);
+
+    const strUndefined = undefined;
+    expect(Dyn.tryCast(strUndefined).to(String).isSome()).toBe(false);
+
+    const typeNull = null;
+    expect(() => Dyn.tryCast("foo").to(typeNull)).toThrowError(
+        "Invalid"
+    );
+    expect(() => Dyn.tryCast("foo").to(typeNull)).toThrowError(
+        "parameter"
+    );
+    expect(() => Dyn.tryCast("foo").to(typeNull)).toThrowError(
+        "null"
+    );
+    const typeUndefined = undefined;
+    expect(() => Dyn.tryCast("foo").to(typeUndefined)).toThrowError(
+        "Invalid"
+    );
+    expect(() => Dyn.tryCast("foo").to(typeUndefined)).toThrowError(
+        "parameter"
+    );
+    expect(() => Dyn.tryCast("foo").to(typeUndefined)).toThrowError(
         "undefined"
     );
 });
