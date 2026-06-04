@@ -3,6 +3,12 @@ name: CI
 on:
   push:
   pull_request:
+  workflow_dispatch:
+
+  # more info see https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
+  schedule:
+    # daily run at midnight
+    - cron: "0 0 * * *"
 
 jobs:
   calc-docker-img-tag:
