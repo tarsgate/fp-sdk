@@ -23,7 +23,7 @@ jobs:
       - name: Verify version matches tag
         run: |
           TAG_VERSION="${HEAD_TAG#v}"
-          PKG_VERSION=$(jq -r '.version' package.json)
+          PKG_VERSION=$(jq --raw-output '.version' package.json)
           if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
             echo "Error: Tag version ($TAG_VERSION) does not match package.json version ($PKG_VERSION)"
             exit 1
