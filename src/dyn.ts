@@ -25,6 +25,7 @@ export namespace Dyn {
                 TCtor extends StringConstructor ? string :
                 TCtor extends NumberConstructor ? number :
                 TCtor extends BooleanConstructor ? boolean :
+                TCtor extends FunctionConstructor ? Function :
                 InstanceType<TCtor>
             > {
                 if (Check.if(variable).isNullish()) {
@@ -61,6 +62,7 @@ export namespace Dyn {
                 TCtor extends StringConstructor ? string :
                 TCtor extends NumberConstructor ? number :
                 TCtor extends BooleanConstructor ? boolean :
+                TCtor extends FunctionConstructor ? Function :
                 InstanceType<TCtor>
             > {
                 if (Check.if(variable).isNullish()) {
