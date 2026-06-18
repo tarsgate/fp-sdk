@@ -207,6 +207,47 @@ test("testing that Dyn.tryCast doesn't throw exceptions for 1st param, but does 
     );
 });
 
+test("testing Dyn.cast().to() with Function", () => {
+    const func1 = () => "hello";
+    expect(Dyn.cast(func1).to(Function).isSome()).toBe(true);
+
+    const func2 = function() { return "hello"; };
+    expect(Dyn.cast(func2).to(Function).isSome()).toBe(true);
+
+    const func3 = Function("return 'hello';");
+    expect(Dyn.cast(func3).to(Function).isSome()).toBe(true);
+
+    const nonFunc = "not a function";
+    expect(Dyn.cast(nonFunc).to(Function).isSome()).toBe(false);
+
+    const obj = {};
+    expect(Dyn.cast(obj).to(Function).isSome()).toBe(false);
+
+    const num = 42;
+    expect(Dyn.cast(num).to(Function).isSome()).toBe(false);
+});
+
+test("same as 'testing Dyn.cast().to() with Function' but with explicit types", () => {
+    const func1 = () => "hello";
+    let castFunc1: Option<Function> = Dyn.cast(func1).to(Function);
+    expect(castFunc1.isSome()).toBe(true);
+
+    const nonFunc = "not a function";
+    let castNonFunc: Option<Function> = Dyn.cast(nonFunc).to(Function);
+    expect(castNonFunc.isSome()).toBe(false);
+});
+
+test("testing Dyn.tryCast().to() with Function", () => {
+    const funcNull = null;
+    expect(Dyn.tryCast(funcNull).to(Function).isSome()).toBe(false);
+
+    const funcUndefined = undefined;
+    expect(Dyn.tryCast(funcUndefined).to(Function).isSome()).toBe(false);
+
+    const func1 = () => "hello";
+    expect(Dyn.tryCast(func1).to(Function).isSome()).toBe(true);
+});
+
 function handleResult(result: Result<number, string>): string {
     if (result instanceof Err) {
         return `Error: ${result.error}`;
